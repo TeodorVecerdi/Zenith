@@ -19,10 +19,10 @@ public class Planet {
 
     private Vector2 SpawnPoint;
     
-    public Database Database;
+    public Zenith.Database Database;
     private Random random;
 
-    public Planet(Database database, PlanetSettings planetSettings, Random GameRNG) {
+    public Planet(Zenith.Database database, PlanetSettings planetSettings, Random GameRNG) {
         Database = database;
         PlanetSettings = planetSettings;
         caves = Mathf.Max(planetSettings.worldSize.x, planetSettings.worldSize.y) / 16;
@@ -37,7 +37,8 @@ public class Planet {
     public void Generate(Action<string> setStatus) {
         setStatus("Building base terrain");
         BuildBaseTerrain();
-        SpawnPoint = new Vector2(PlanetSettings.worldSize.x/2+Utils.CHUNKWIDTH/2, GenHeight[PlanetSettings.worldSize.x/2]);
+        SpawnPoint = new Vector2(PlanetSettings.worldSize.x/2+Utils.CHUNKWIDTH/2, GenHeight[PlanetSettings.worldSize.x/2+Utils.CHUNKWIDTH/2]);
+        Debug.Log("PLANET:GENERATE():SPAWNPOINT:"+SpawnPoint);
         setStatus("Building caves");
         BuildCaves(caves, caveLengthBoost);
         setStatus("Populating the underground");
