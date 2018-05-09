@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using Random = System.Random;
+using Zenith;
 
 public class GameManager : MonoBehaviour {
 
@@ -9,10 +10,10 @@ public class GameManager : MonoBehaviour {
 	public string GameName;
 	public int GameSeed;
 
-	public Database Database;
+	public Zenith.Database Database;
 	public Random random;
 
-	public void Initialize(Database database) {
+	public void Initialize(Zenith.Database database) {
 		Noise.Seed = GameSeed;
 		Database = database;
 		random = new Random(GameSeed);
@@ -43,8 +44,7 @@ public class GameManager : MonoBehaviour {
 		string undergroundTile = Database.BiomeDatabase.BiomeDictionary[biome].undergroundTile;
 		
 		string[] features = Database.BiomeDatabase.BiomeDictionary[biome].features;
-		
-		return new PlanetSettings {
+		PlanetSettings settings = new PlanetSettings {
 			worldSize = worldSize,
 			oreSamples = oreSamples,
 			ores = ores.ToArray(),
@@ -55,5 +55,8 @@ public class GameManager : MonoBehaviour {
 			undergroundTile = undergroundTile,
 			features = features
 		};
+		Debug.Log("GENERALMANAGER:GENERATEPLANET():PLANETSETTINGS:");
+		settings.DebugPrint();
+		return settings;
 	}
 }

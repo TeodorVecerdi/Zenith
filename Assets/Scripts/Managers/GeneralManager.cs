@@ -14,7 +14,7 @@ public class GeneralManager : MonoBehaviour {
     public TMP_Text StatusText;
     public string LoadingStatusText;
     
-    public Database Database;
+    public Zenith.Database Database;
 
     private void Update() {
         if (LoadingShouldChangeStatusText) {

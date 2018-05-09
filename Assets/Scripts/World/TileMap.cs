@@ -19,9 +19,9 @@ public class TileMap : MonoBehaviour {
 
     private System.Random GameRNG;
     public PlanetSettings PlanetSettings;
-    public Database Database;
+    public Zenith.Database Database;
 
-    public void Create(System.Random GameRNG, Database database, PlanetSettings planetSettings) {
+    public void Create(System.Random GameRNG, Zenith.Database database, PlanetSettings planetSettings) {
         this.GameRNG = GameRNG;
         PlanetSettings = planetSettings;
         Database = database;
@@ -29,7 +29,7 @@ public class TileMap : MonoBehaviour {
     }
 
     private void AddChunks() {
-        int startX = (int) Planet.getChunkIndex((int)Planet.getSpawnPoint().x, (int)Planet.getSpawnPoint().y).x - 1;
+        int startX = (int) Planet.getChunkIndex((int) Planet.getSpawnPoint().x, (int) Planet.getSpawnPoint().y).x - 1;
         int startY = (int) Planet.getChunkIndex((int) Planet.getSpawnPoint().x, (int) Planet.getSpawnPoint().y).y - 1;
         for (int i = startY; i < startY + 3; i++)
         for (int j = startX; j < startX + 3; j++) {

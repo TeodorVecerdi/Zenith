@@ -3,7 +3,10 @@
 public class WorldManager : MonoBehaviour {
     [Header("Script References")]
     public TargetFollow CameraFollow;
-    [Space]
+
+    [Space] 
+    [Header("Prefabs")] 
+    public GameObject ItemPickupPrefab;
     
     private TileMap tileMap;
     private bool shouldUpdate;
@@ -134,27 +137,37 @@ public class WorldManager : MonoBehaviour {
     }
 
     private void HandleInput() {
-        if (Input.GetKeyDown(KeyCode.Alpha1) && playerInventory.Inventory.ContainsKey("dirt"))
-            playerInventory.setSelected("dirt");
-        if (Input.GetKeyDown(KeyCode.Alpha2) && playerInventory.Inventory.ContainsKey("grass"))
-            playerInventory.setSelected("grass");
-        if (Input.GetKeyDown(KeyCode.Alpha3) && playerInventory.Inventory.ContainsKey("stone"))
-            playerInventory.setSelected("stone");
+        int hbSelection = CheckHotbarSelection();
+        if(hbSelection != -1)
+            playerInventory.setSelected(hbSelection);
+//        if (Input.GetKeyDown(KeyCode.Alpha1) && playerInventory.Inventory.ContainsKey("dirt"))
+//            playerInventory.setSelected("dirt");
+//        if (Input.GetKeyDown(KeyCode.Alpha2) && playerInventory.Inventory.ContainsKey("grass"))
+//            playerInventory.setSelected("grass");
+//        if (Input.GetKeyDown(KeyCode.Alpha3) && playerInventory.Inventory.ContainsKey("stone"))
+//            playerInventory.setSelected("stone");
         
-        
+        //BREAK BLOCK
         if (Input.GetButton("Fire1")) {
             Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Tile actionTile = tileMap.Planet.getBlocks()[(int) mousePosition.x, (int) mousePosition.y];
             if(actionTile.properties.undestructible) return;
             
-            playerInventory.AddItem(actionTile.itemID);
-
+//            playerInventory.AddItem(actionTile.itemID);
+            GameObject pickup = Instantiate(ItemPickupPrefab, new Vector3((int) mousePosition.x + 0.5f, (int) mousePosition.y + 0.5f, 0), Quaternion.identity);
+            pickup.name = actionTile.id;
+            pickup.transform.Find("ItemPickupRender").GetComponent<SpriteRenderer>().sprite = tileMap.Database.ItemDatabase.Sprites[actionTile.itemID];
+            
+            Debug.Log("Instantiated pickup: " + pickup);
+            
             tileMap.Planet.getBlocks()[(int) mousePosition.x, (int) mousePosition.y] = tileMap.Database.TileDatabase.TileDictionary["air"];
             
             Vector2 chunkIndex = tileMap.Planet.getChunkIndex((int) mousePosition.x, (int) mousePosition.y);
             Chunk chunk = GameObject.Find("Chunk@" + chunkIndex.x + "," + chunkIndex.y).GetComponent<Chunk>();
             chunk.Build();
         }
+        
+        //PLACE BLOCK
         if (Input.GetButton("Fire2")) {
             Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Tile actionTile = tileMap.Planet.getBlocks()[(int) mousePosition.x, (int) mousePosition.y];
@@ -171,10 +184,25 @@ public class WorldManager : MonoBehaviour {
         }
     }
 
+    private int CheckHotbarSelection() {
+        if (Input.GetKeyDown(KeyCode.Alpha1)) return 1;
+        if (Input.GetKeyDown(KeyCode.Alpha2)) return 2;
+        if (Input.GetKeyDown(KeyCode.Alpha3)) return 3;
+        if (Input.GetKeyDown(KeyCode.Alpha4)) return 4;
+        if (Input.GetKeyDown(KeyCode.Alpha5)) return 5;
+        if (Input.GetKeyDown(KeyCode.Alpha6)) return 6;
+        if (Input.GetKeyDown(KeyCode.Alpha7)) return 7;
+        if (Input.GetKeyDown(KeyCode.Alpha8)) return 8;
+        if (Input.GetKeyDown(KeyCode.Alpha9)) return 9;
+        return -1;
+    }
+
     public void Initialize(GameObject PlayerPrefab, TileMap tileMap) {
         this.tileMap = tileMap;
         GameObject player = Instantiate(PlayerPrefab, tileMap.Planet.getSpawnPoint()+Vector2.up*4, Quaternion.identity);
         player.name = "Player";
+        Debug.Log("WORLDMANAGER:INITIALIZE():PLAYERPOS:"+player.transform.position);
+
         playerInventory = player.GetComponent<PlayerInventory>();
         CameraFollow.target = player.transform;
         CameraFollow.transform.position = new Vector3(tileMap.Planet.getSpawnPoint().x, tileMap.Planet.getSpawnPoint().y, CameraFollow.transform.position.z);
