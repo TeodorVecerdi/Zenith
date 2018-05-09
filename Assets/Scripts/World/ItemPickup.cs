@@ -21,10 +21,12 @@ public class ItemPickup : MonoBehaviour {
             var Inventory = other.GetComponent<PlayerInventory>().Inventory;
             if (Inventory.ContainsKey(name)) {
                 Inventory[name] += Count;
+                GameObject.Find("SOUND_ItemPickup").GetComponent<AudioSource>().Play();
                 Destroy(gameObject);
             }
             else if (Inventory.Keys.Count < 9) {
                 Inventory.Add(name, Count);
+                GameObject.Find("SOUND_ItemPickup").GetComponent<AudioSource>().Play();
                 Destroy(gameObject);
             }
         }
