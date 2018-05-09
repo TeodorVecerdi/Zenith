@@ -51,7 +51,7 @@ public class Planet {
         float noiseScale = 0.008f;
         for (int i = 0; i < PlanetSettings.worldSize.x; i++) {
             int genHeight = Mathf.FloorToInt(Utils.map(Noise.CalcPixel1D(i, noiseScale) * 1, 0, 256,
-                PlanetSettings.worldSize.y - 256 - 128, PlanetSettings.worldSize.y - 128));
+                PlanetSettings.worldSize.y / 2 - 120, PlanetSettings.worldSize.y / 2 + 136));
             GenHeight[i] = genHeight;
             for (int j = 0; j < PlanetSettings.worldSize.y; j++) {
                 if (j > genHeight) {
