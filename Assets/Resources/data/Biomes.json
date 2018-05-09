@@ -1,0 +1,25 @@
+﻿{
+    "Content":
+    [
+        {
+            "id": "plains",
+            "surfaceTile": "grass",
+            "undergroundTile": "dirt",
+            "features": [
+                "flowerYellow",
+                "flowerRed",
+                "flowerBlue",
+                "grass"
+            ]
+        },
+        {
+            "id": "forest",
+            "surfaceTile": "grass",
+            "undergroundTile": "dirt",
+            "features": [
+                "tree",
+                "grass"
+            ]
+        }
+    ]
+}

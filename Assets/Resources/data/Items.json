@@ -1,0 +1,40 @@
+﻿{
+    "Content":
+    [
+        {
+            "id": "dirt",
+            "name": "Dirt",
+            "description": "Just some dirt.. might be useful some day."
+        },
+        {
+            "id": "grass",
+            "name": "Grass",
+            "description": "Basic resource, mainly used for houses but you can use it to grow crops too."
+        },
+        {
+            "id": "stone",
+            "name": "Stone",
+            "description": "Very rocky."
+        },
+        {
+            "id": "bedrock",
+            "name": "Bedrock",
+            "description": "The hardest material ever known by humans. Can you break it?"
+        },
+        {
+            "id": "wood_log",
+            "name": "Wood Log",
+            "description": "Comes from big tall things. Nothing more is known about this weird material"
+        },
+        {
+            "id": "wood_planks",
+            "name": "Wood Planks",
+            "description": "TODO DESCRIPTION"
+        },
+        {
+            "id": "stick",
+            "name": "Wood Stick",
+            "description": "TODO DESCRIPTION"
+        }
+    ]
+}
