@@ -13,6 +13,11 @@ public class PlayerInventory : MonoBehaviour {
     void Start() {
         TileMap = GameObject.Find("TileMap").GetComponent<TileMap>();
         Inventory = new Dictionary<string, int>();
+        Debug.Log("PLAYERINVENTORY:START(): DEBUG ADD ITEMS TO INVENTORY");
+        Inventory.Add("grass", 1000);
+        Inventory.Add("dirt", 1000);
+        Inventory.Add("stone", 1000);
+        Inventory.Add("bedrock", 1000);
         InventoryDebugText = GameObject.Find("InventoryDebugText").GetComponent<TMP_Text>();
         InventorySelectedType = GameObject.Find("InventorySelectedType").GetComponent<TMP_Text>();
         setSelected("air");
