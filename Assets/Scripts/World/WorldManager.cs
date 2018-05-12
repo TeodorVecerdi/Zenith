@@ -4,6 +4,7 @@ using UnityEngine;
 public class WorldManager : MonoBehaviour {
     [Header("Script References")] 
     public TargetFollow CameraFollow;
+    
     [Space] 
     [Header("Prefabs")] 
     public GameObject ItemPickupPrefab;
@@ -16,7 +17,10 @@ public class WorldManager : MonoBehaviour {
     private int chunkLeft, chunkBottom;
     private GameObject[,] chunks;
 
-    //Block Breaking
+    //Block Breaking   
+    [Space]
+    [Header("Block Breaking")] 
+    public ParticleSystem BlockBreakingParticles;
     public float MaxBlockBreakingDistance = 10f;
     private Vector2Int currentBlockPosition;
     private double currentMineTime;
@@ -207,12 +211,16 @@ public class WorldManager : MonoBehaviour {
             currentBlockPosition = mousePosition;
             currentMineTime = 0.0d;
             requiredMineTime = tileUnderMouse.properties.hardness;
+            BlockBreakingParticles.transform.position = new Vector3(mousePosition.x + 0.5f, mousePosition.y + 0.5f, -3);
+            BlockBreakingParticles.GetComponent<Renderer>().material.mainTexture = tileMap.Database.ItemDatabase.Sprites[tileUnderMouse.itemID].texture;
+            BlockBreakingParticles.Play();
             return true;
         }
         return false;
     }
 
     private void StopMining() {
+        BlockBreakingParticles.Stop();
         isCurrentlyMining = false;
     }
 

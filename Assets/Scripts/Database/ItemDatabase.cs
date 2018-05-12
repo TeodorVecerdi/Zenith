@@ -14,7 +14,7 @@ public class ItemDatabase {
         Item[] itemArray = JsonHelper.FromJson<Item>(itemsJSON);
         foreach (Item item in itemArray) {
             ItemDictionary.Add(item.id, item);
-            Sprite currentSprite = Resources.Load<Sprite>("textures/" + item.id);
+            Sprite currentSprite = Resources.Load<Sprite>("itemTextures-assets/" + item.id);
 //            Debug.Log("itemID: " + item.id + " sprite: " + currentSprite);
             if(currentSprite != null)
                 Sprites.Add(item.id, currentSprite);
