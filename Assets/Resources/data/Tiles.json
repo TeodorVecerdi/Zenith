@@ -57,7 +57,7 @@
                 "y": 12.0
             },
             "properties": {
-                "hardness": 0,
+                "hardness": 1,
                 "undestructible": true
             }
         },
