@@ -1,4 +1,7 @@
-﻿public class Utils {
+﻿using System.IO;
+using UnityEngine;
+
+public class Utils {
     public const int CHUNKWIDTH = 48;
     public const int CHUNKHEIGHT = 32;
     /*
@@ -15,4 +18,25 @@
     public static int RandomInt(System.Random random, int start, int end) {
         return random.Next(start, end);
     }
+
+    public static float Distance(Vector3 a, Vector3 b) {
+        return Mathf.Sqrt(Mathf.Pow(b.x - a.x, 2) + Mathf.Pow(b.y - a.y, 2));
+    }
+
+    public static float Distance(Vector2Int a, Vector2Int b) {
+        Vector3 A = new Vector3(a.x, a.y, 0); 
+        Vector3 B = new Vector3(b.x, b.y, 0);
+        return Distance(A, B);
+    }
+
+    public static float Distance(Vector2Int a, Vector3 b) {
+        Vector3 A = new Vector3(a.x, a.y, 0);
+        return Distance(A, b);
+    }
+
+    public static float Distance(Vector3 a, Vector2Int b) {
+        Vector3 B = new Vector3(b.x, b.y, 0);
+        return Distance(a, B);
+    }
+    
 }
