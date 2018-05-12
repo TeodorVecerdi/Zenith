@@ -27,6 +27,7 @@ public class GameManager : MonoBehaviour {
 		WorldSize worldSize = Database.WorldDatabase.World.sizes[Utils.RandomInt(random, 0, Database.WorldDatabase.World.sizes.Length)];
 		
 		int oreSamples = Database.WorldDatabase.World.oreSamples[Utils.RandomInt(random, 0, Database.WorldDatabase.World.oreSamples.Length)];
+		double heightBoost = Database.WorldDatabase.World.heightBoost[Utils.RandomInt(random, 0, Database.WorldDatabase.World.heightBoost.Length)];
 		
 		List<string> ores = new List<string>();
 		for (int i = 0; i < oreSamples; i++) {
@@ -40,18 +41,20 @@ public class GameManager : MonoBehaviour {
 		string biome = Database.WorldDatabase.World.biomes[Utils.RandomInt(random, 0, Database.WorldDatabase.World.biomes.Length)];
 		
 		string surfaceTile = Database.BiomeDatabase.BiomeDictionary[biome].surfaceTile;
+		string middleTile = Database.BiomeDatabase.BiomeDictionary[biome].middleTile;
 		
 		string undergroundTile = Database.BiomeDatabase.BiomeDictionary[biome].undergroundTile;
 		
 		string[] features = Database.BiomeDatabase.BiomeDictionary[biome].features;
 		PlanetSettings settings = new PlanetSettings {
 			worldSize = worldSize,
-			oreSamples = oreSamples,
+			heightBoost = heightBoost,
 			ores = ores.ToArray(),
 			oreLengthBoost = oreLengthBoost,
 			caveLengthBoost = caveLengthBoost,
 			biome = biome,
 			surfaceTile = surfaceTile,
+			middleTile = middleTile,
 			undergroundTile = undergroundTile,
 			features = features
 		};

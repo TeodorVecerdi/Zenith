@@ -9,7 +9,7 @@ public class Tile {
     public Properties properties;
 
     public void DebugPrint() {
-        Debug.Log(string.Format("{0}: {1}, {2}, {3}, {4}", id, itemID, texture, properties.hardness, properties.undestructible));
+        Debug.Log(string.Format("{0}: {1}, {2}, {3}, {4}, {5}", id, itemID, texture, properties.hardness, properties.undestructible, properties.transparent));
     }
 }
 
@@ -17,4 +17,5 @@ public class Tile {
 public class Properties {
     public double hardness = 0;
     public bool undestructible = false;
+    public bool transparent = false;
 }

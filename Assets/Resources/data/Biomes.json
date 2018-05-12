@@ -4,21 +4,35 @@
         {
             "id": "plains",
             "surfaceTile": "grass",
+            "middleTile": "dirt",
             "undergroundTile": "dirt",
             "features": [
                 "flowerYellow",
                 "flowerRed",
                 "flowerBlue",
+                "bush",
                 "grass"
             ]
         },
         {
             "id": "forest",
             "surfaceTile": "grass",
+            "middleTile": "dirt",
             "undergroundTile": "dirt",
             "features": [
                 "tree",
+                "bush",
                 "grass"
+            ]
+        },
+        {
+            "id": "desert",
+            "surfaceTile": "sand",
+            "middleTile": "sand",
+            "undergroundTile": "stone",
+            "features": [
+                "cactus",
+                "shrub"
             ]
         }
     ]

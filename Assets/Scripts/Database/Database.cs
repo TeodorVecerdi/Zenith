@@ -6,12 +6,14 @@ namespace Zenith {
         public TileDatabase TileDatabase;
         public WorldDatabase WorldDatabase;
         public BiomeDatabase BiomeDatabase;
+        public StructureDatabase StructureDatabase;
 
         public Database() {
             ItemDatabase = new ItemDatabase();
             TileDatabase = new TileDatabase();
             WorldDatabase = new WorldDatabase();
             BiomeDatabase = new BiomeDatabase();
+            StructureDatabase = new StructureDatabase();
         }
 
         public Database Load(Action<string> SetStatus) {
@@ -24,6 +26,8 @@ namespace Zenith {
             WorldDatabase.Load();
             SetStatus("Loading Biome Database");
             BiomeDatabase.Load();
+            SetStatus("Loading Structure Database");
+            StructureDatabase.Load();
 //        Debug.Log("Finished database loading");
             return this;
         }

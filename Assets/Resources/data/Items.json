@@ -35,6 +35,16 @@
             "id": "stick",
             "name": "Wood Stick",
             "description": "TODO DESCRIPTION"
+        }, 
+        {
+            "id": "leaves",
+            "name": "Leaves",
+            "description": "TODO DESCRIPTION"
+        },
+        {
+            "id": "sand",
+            "name": "Sand",
+            "description": "TODO DESCRIPTION"
         }
     ]
 }

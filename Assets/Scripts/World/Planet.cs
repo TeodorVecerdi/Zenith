@@ -5,20 +5,16 @@ using Random = System.Random;
 public class Planet {
     private Tile[,] blocks;
     private Tile[,] blocksBG;
-    private int[] GenHeight;
+    public int[] GenHeight;
 
     public PlanetSettings PlanetSettings;
 
-    private int worldWidth, worldHeight;
-    private int chunkWidth, chunkHeight;
-    
-    
     private int caves;
     private double caveLengthBoost;
     private int stonePockets;
 
     private Vector2 SpawnPoint;
-    
+
     public Zenith.Database Database;
     private Random random;
 
@@ -37,8 +33,7 @@ public class Planet {
     public void Generate(Action<string> setStatus) {
         setStatus("Building base terrain");
         BuildBaseTerrain();
-        SpawnPoint = new Vector2(PlanetSettings.worldSize.x/2+Utils.CHUNKWIDTH/2, GenHeight[PlanetSettings.worldSize.x/2+Utils.CHUNKWIDTH/2]);
-        Debug.Log("PLANET:GENERATE():SPAWNPOINT:"+SpawnPoint);
+        SpawnPoint = new Vector2(PlanetSettings.worldSize.x / 2 + Utils.CHUNKWIDTH / 2, GenHeight[PlanetSettings.worldSize.x / 2 + Utils.CHUNKWIDTH / 2]);
         setStatus("Building caves");
         BuildCaves(caves, caveLengthBoost);
         setStatus("Populating the underground");
@@ -46,12 +41,12 @@ public class Planet {
         setStatus("Populating the surface");
         PopulateSurface();
     }
-    
+
     private void BuildBaseTerrain() {
         float noiseScale = 0.008f;
         for (int i = 0; i < PlanetSettings.worldSize.x; i++) {
             int genHeight = Mathf.FloorToInt(Utils.map(Noise.CalcPixel1D(i, noiseScale) * 1, 0, 256,
-                PlanetSettings.worldSize.y / 2 - 120, PlanetSettings.worldSize.y / 2 + 136));
+                PlanetSettings.worldSize.y / 2 - 128, PlanetSettings.worldSize.y / 2 + (float) (128 * PlanetSettings.heightBoost)));
             GenHeight[i] = genHeight;
             for (int j = 0; j < PlanetSettings.worldSize.y; j++) {
                 if (j > genHeight) {
@@ -60,15 +55,18 @@ public class Planet {
                 }
                 else if (j == genHeight) {
                     blocks[i, j] = Database.TileDatabase.TileDictionary[PlanetSettings.surfaceTile];
-                    blocksBG[i, j] = Database.TileDatabase.TileDictionary[PlanetSettings.undergroundTile];
+                    blocksBG[i, j] = Database.TileDatabase.TileDictionary[PlanetSettings.surfaceTile];
+                }else if (j < genHeight && j >= genHeight-8) {
+                    blocks[i, j] = Database.TileDatabase.TileDictionary[PlanetSettings.middleTile];
+                    blocksBG[i, j] = Database.TileDatabase.TileDictionary[PlanetSettings.middleTile];
                 }
-                else if (j < genHeight) {
+                else if (j < genHeight - 8) {
                     blocks[i, j] = Database.TileDatabase.TileDictionary[PlanetSettings.undergroundTile];
                     blocksBG[i, j] = Database.TileDatabase.TileDictionary[PlanetSettings.undergroundTile];
                 }
             }
         }
-        for(int i = 0; i < PlanetSettings.worldSize.x; i++)
+        for (int i = 0; i < PlanetSettings.worldSize.x; i++)
         for (int j = 0; j < Utils.CHUNKHEIGHT * 2; j++) {
             blocks[i, j] = Database.TileDatabase.TileDictionary["bedrock"];
             blocksBG[i, j] = Database.TileDatabase.TileDictionary["bedrock"];
@@ -88,7 +86,40 @@ public class Planet {
         }
     }
 
-    private void PopulateSurface() { }
+    private void PopulateSurface() {
+        foreach (string biomeFeature in Database.BiomeDatabase.BiomeDictionary[PlanetSettings.biome].features) {
+            if (Database.StructureDatabase.StructureDictionary.ContainsKey(biomeFeature)) {
+                int bounds = PlanetSettings.worldSize.x / 8;
+                for (int i = 0; i < bounds; i++) {
+                    int posX;
+                    Structure structure = Database.StructureDatabase.StructureDictionary[biomeFeature][Utils.RandomInt(random, 0, Database.StructureDatabase.StructureDictionary[biomeFeature].Length)];
+                    do {
+                        posX = Utils.RandomInt(random, 0, PlanetSettings.worldSize.x);
+                    } while (!CanPlaceStructure(structure, posX));
+                    PlaceStructure(structure, posX);
+                }
+            }
+        }
+    }
+
+    private bool CanPlaceStructure(Structure structure, int posX) {
+        int offsetY = GenHeight[posX] + 1;
+        int offsetX = posX - (int) structure.size.x / 2;
+        foreach (StructureTile structureTile in structure.tiles) {
+            if (blocks[offsetX + (int) structureTile.pos.x, offsetY + (int) structureTile.pos.y].id != structureTile.tile &&
+                blocks[offsetX + (int) structureTile.pos.x, offsetY + (int) structureTile.pos.y].id != "air")
+                return false;
+        }
+        return true;
+    }
+
+    private void PlaceStructure(Structure structure, int posX) {
+        int offsetY = GenHeight[posX] + 1;
+        int offsetX = posX - (int) structure.size.x / 2;
+        foreach (StructureTile structureTile in structure.tiles) {
+            blocks[offsetX + (int) structureTile.pos.x, offsetY + (int) structureTile.pos.y] = Database.TileDatabase.TileDictionary[structureTile.tile];
+        }
+    }
 
     /*
      * Spawns a new worm
@@ -101,9 +132,9 @@ public class Planet {
         float x = Mathf.Floor(Utils.RandomFloat(random, 0f, PlanetSettings.worldSize.x));
         Vector2 currentWormPosition = new Vector2(
             x,
-            Mathf.Floor(Utils.RandomFloat(random, 0f, GenHeight[(int)x]))
+            Mathf.Floor(Utils.RandomFloat(random, 0f, GenHeight[(int) x]))
         );
-        int wormLifetimeMax = (int) Utils.RandomFloat(random, 7 * (float)lifespanBoost, 10 * (float)lifespanBoost);
+        int wormLifetimeMax = (int) Utils.RandomFloat(random, 7 * (float) lifespanBoost, 10 * (float) lifespanBoost);
         int currentWormSteps = 0;
 
         while (currentWormSteps < wormLifetimeMax) {
@@ -155,9 +186,11 @@ public class Planet {
                     if (!blocks[(int) position.x + (int) x, (int) position.y + (int) y].properties.undestructible)
                         if (layer == 0) {
                             blocks[(int) position.x + (int) x, (int) position.y + (int) y] = Database.TileDatabase.TileDictionary[tileID];
-                        }else if(layer == 1){
+                        }
+                        else if (layer == 1) {
                             blocksBG[(int) position.x + (int) x, (int) position.y + (int) y] = Database.TileDatabase.TileDictionary[tileID];
-                        }else if (layer == 2) {
+                        }
+                        else if (layer == 2) {
                             blocks[(int) position.x + (int) x, (int) position.y + (int) y] = Database.TileDatabase.TileDictionary[tileID];
                             blocksBG[(int) position.x + (int) x, (int) position.y + (int) y] = Database.TileDatabase.TileDictionary[tileID];
                         }
@@ -178,6 +211,7 @@ public class Planet {
     public Tile[,] getBlocks() {
         return blocks;
     }
+
     public Tile[,] getBlocksBG() {
         return blocksBG;
     }

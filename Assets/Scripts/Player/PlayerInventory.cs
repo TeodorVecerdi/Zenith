@@ -6,6 +6,7 @@ using UnityEngine;
 public class PlayerInventory : MonoBehaviour {
     private TMP_Text InventoryDebugText;
     private TMP_Text InventorySelectedType;
+    private TMP_Text MousePosition;
     private TileMap TileMap;
     public Dictionary<string, int> Inventory;
     public string selectedType;
@@ -20,10 +21,13 @@ public class PlayerInventory : MonoBehaviour {
         Inventory.Add("bedrock", 1000);
         InventoryDebugText = GameObject.Find("InventoryDebugText").GetComponent<TMP_Text>();
         InventorySelectedType = GameObject.Find("InventorySelectedType").GetComponent<TMP_Text>();
+        MousePosition = GameObject.Find("MousePositionDebugText").GetComponent<TMP_Text>();
         setSelected("air");
     }
 
     void Update() {
+        MousePosition.text = "px:"+(int)transform.position.x+"\npy:"+(int)transform.position.y+"\nmx:" + (int)Camera.main.ScreenToWorldPoint(Input.mousePosition).x + "\nmy:" + (int)Camera.main.ScreenToWorldPoint(Input.mousePosition).y +
+                             "\n GH:" + TileMap.Planet.GenHeight[(int) Camera.main.ScreenToWorldPoint(Input.mousePosition).x];
         InventoryDebugText.text = "INVENTORY:\n";
         if (Inventory.Count == 0)
             InventoryDebugText.text += "EMPTY";

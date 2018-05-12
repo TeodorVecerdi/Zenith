@@ -3,6 +3,7 @@
 [Serializable]
 public class World {
     public WorldSize[] sizes;
+    public double[] heightBoost;
     public string[] biomes;
     public int[] oreSamples;
     public string[] ores;

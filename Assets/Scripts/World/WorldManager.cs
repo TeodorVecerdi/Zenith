@@ -161,7 +161,7 @@ public class WorldManager : MonoBehaviour {
             Tile tileUnderMouse = tileMap.Planet.getBlocks()[mousePosition.x, mousePosition.y];
             
             //Stop if trying to place on another block or too far
-            if (tileUnderMouse.id != "air" || !IsDistanceOk(mousePosition)  || !IsPlayerOk(mousePosition)) return;
+            if (tileUnderMouse.id != "air" || !IsDistanceOk(mousePosition)  || !IsPlayerOk()) return;
 
             string selected = playerInventory.getSelected();
             
@@ -229,17 +229,15 @@ public class WorldManager : MonoBehaviour {
         return Utils.Distance(mousePosition, playerPosition) <= MaxBlockBreakingDistance;
     }
 
-    private bool IsPlayerOk(Vector2Int mousePosition) {
-        Vector2Int playerPosition = new Vector2Int((int) playerInventory.transform.position.x, (int) playerInventory.transform.position.y);
-        return Mathf.Abs(playerPosition.x - mousePosition.x) > 1 || Mathf.Abs(playerPosition.y - mousePosition.y) > 2;
+    private bool IsPlayerOk() {
+        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        return Mathf.Abs(mousePosition.x - playerInventory.transform.position.x) > 1 || Mathf.Abs(mousePosition.y - playerInventory.transform.position.y) > 2;
     }
 
     private void BreakBlock(Vector2Int mousePosition, Tile tileUnderMouse) {
         GameObject pickup = Instantiate(ItemPickupPrefab, new Vector3(mousePosition.x + 0.5f, mousePosition.y + 0.5f, 0), Quaternion.identity);
         pickup.name = tileUnderMouse.id;
         pickup.transform.Find("ItemPickupRender").GetComponent<SpriteRenderer>().sprite = tileMap.Database.ItemDatabase.Sprites[tileUnderMouse.itemID];
-
-        Debug.Log("Instantiated pickup: " + pickup);
 
         tileMap.Planet.getBlocks()[mousePosition.x, mousePosition.y] = tileMap.Database.TileDatabase.TileDictionary["air"];
 
@@ -264,7 +262,6 @@ public class WorldManager : MonoBehaviour {
         this.tileMap = tileMap;
         GameObject player = Instantiate(PlayerPrefab, tileMap.Planet.getSpawnPoint() + Vector2.up * 4, Quaternion.identity);
         player.name = "Player";
-        Debug.Log("WORLDMANAGER:INITIALIZE():PLAYERPOS:" + player.transform.position);
 
         playerInventory = player.GetComponent<PlayerInventory>();
         CameraFollow.target = player.transform;

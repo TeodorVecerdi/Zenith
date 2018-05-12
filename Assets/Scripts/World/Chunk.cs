@@ -112,7 +112,7 @@ public class Chunk : MonoBehaviour {
 
         for (int i = 0; i < Utils.CHUNKWIDTH; i++) {
             for (int j = 0; j < Utils.CHUNKHEIGHT; j++) {
-                if (blocks[i, j].id != "air") {
+                if (!blocks[i, j].properties.transparent) {
                     Rectangle current = new Rectangle(new Vector2(i, j), new Vector2(i + 1, j + 1));
                     ExtendRectangle(ref current, blocks);
                     blocks[i, j] = world.Database.TileDatabase.TileDictionary["air"];
@@ -145,7 +145,7 @@ public class Chunk : MonoBehaviour {
 
     private void ExtendRectangle_H(ref Rectangle current, Tile[,] blocks) {
         for (int i = (int) current.min.x; i < Utils.CHUNKWIDTH; i++) {
-            if (blocks[i, (int) current.min.y].id != "air") {
+            if (!blocks[i, (int) current.min.y].properties.transparent) {
                 current.max.x = i + 1;
                 blocks[i, (int) current.min.y] = world.Database.TileDatabase.TileDictionary["air"];
             }
@@ -167,7 +167,7 @@ public class Chunk : MonoBehaviour {
 
     private bool ExtendRectangle_VerifyExtension(int i, Rectangle current, Tile[,] blocks) {
         for (int x = (int) current.min.x; x < (int) current.max.x; x++)
-            if (blocks[x, i].id == "air")
+            if (blocks[x, i].properties.transparent)
                 return false;
         return true;
     }

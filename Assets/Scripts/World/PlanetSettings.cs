@@ -3,14 +3,14 @@
 public class PlanetSettings {
     public WorldSize worldSize;
 
-    public int oreSamples;
     public string[] ores;
-
+    public double heightBoost;
     public double oreLengthBoost;
     public double caveLengthBoost;
     
     public string biome;
     public string surfaceTile;
+    public string middleTile;
     public string undergroundTile;
     public string[] features;
 
