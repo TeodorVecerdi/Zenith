@@ -21,6 +21,10 @@ public class GeneralManager : MonoBehaviour {
             LoadingShouldChangeStatusText = false;
             StatusText.text = LoadingStatusText;
         }
+        //Debug quit
+        if ((Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) && Input.GetKey(KeyCode.Escape)) {
+            Application.Quit();
+        }
     }
     
     public void CreateGame() {
